@@ -22,10 +22,14 @@ public class Server {
 
             while(ligado){
 
+
+//                System.out.println("Servidor conectado");
+                JanelaPrincipal.textoServidor.append("Servidor conectado\n");
                 Socket socket = serverSocket.accept();
-                System.out.println("Servidor conectado");
+
                 ClientThread cliente = new ClientThread(socket);
                 listaCLientesConectados.add(cliente);
+                JanelaPrincipal.textoServidor.append("Novo Cliente conectado. Ip: "+socket.getInetAddress().getHostAddress());
                 cliente.start();
             }
             for (ClientThread ct: Server.listaCLientesConectados) {
