@@ -21,7 +21,7 @@ public class ClientThread extends Thread {
                     break;
                 }
                 imprimirParaTodos(msg);
-                System.out.println("Mensagem `"+msg+"` foi enviada por"+socket.getLocalAddress().getHostAddress());
+                JanelaPrincipal.textoServidor.append("Mensagem `"+msg+"` foi enviada por "+socket.getLocalAddress().getHostAddress()+"\n");
 
             }
         }catch (IOException e){

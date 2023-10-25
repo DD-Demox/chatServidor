@@ -24,7 +24,7 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 ClientThread cliente = new ClientThread(socket);
                 listaCLientesConectados.add(cliente);
-                JanelaPrincipal.textoServidor.append("Novo Cliente conectado. Ip: "+socket.getInetAddress().getHostAddress());
+                JanelaPrincipal.textoServidor.append("Novo Cliente conectado. Ip: "+socket.getInetAddress().getHostAddress()+"\n");
                 cliente.start();
             }
             for (ClientThread ct: Server.listaCLientesConectados) {
