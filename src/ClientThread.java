@@ -31,7 +31,9 @@ public class ClientThread extends Thread {
 
     private void imprimirParaTodos(String msg) {
         for (ClientThread ct: Server.listaCLientesConectados) {
-            ct.outputClient.println(msg);
+            if(ct != this){
+                ct.outputClient.println(msg);
+            }
         }
     }
 
