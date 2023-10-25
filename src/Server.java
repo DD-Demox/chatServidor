@@ -17,16 +17,11 @@ public class Server {
 
     private void run(int port){
         try(ServerSocket serverSocket = new ServerSocket(10000)){
-//            System.out.println("Servidor conectado");
+            JanelaPrincipal.textoServidor.append("Servidor conectado\n");
             boolean ligado = true;
 
             while(ligado){
-
-
-//                System.out.println("Servidor conectado");
-                JanelaPrincipal.textoServidor.append("Servidor conectado\n");
                 Socket socket = serverSocket.accept();
-
                 ClientThread cliente = new ClientThread(socket);
                 listaCLientesConectados.add(cliente);
                 JanelaPrincipal.textoServidor.append("Novo Cliente conectado. Ip: "+socket.getInetAddress().getHostAddress());
