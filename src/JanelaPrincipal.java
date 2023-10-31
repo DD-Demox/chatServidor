@@ -11,6 +11,7 @@ public class JanelaPrincipal {
         janelaPricipal.setSize(500,500);
         janelaPricipal.setLocationRelativeTo(null);
         janelaPricipal.getContentPane().setLayout(null);
+        janelaPricipal.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JButton ligarBotao = new JButton("Ligar Servidor");
         ligarBotao.setBounds(200,50,150,20);

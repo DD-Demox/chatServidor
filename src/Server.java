@@ -4,18 +4,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
-    private int port = 5000;
+
     public static ArrayList<ClientThread> listaCLientesConectados = new ArrayList<>();
 
 
     Server(){
-        run(this.port);
-    }
-    Server(int port){
-        run(port);
+        run();
     }
 
-    private void run(int port){
+
+    private void run(){
         try(ServerSocket serverSocket = new ServerSocket(10000)){
             JanelaPrincipal.textoServidor.append("Servidor conectado\n");
             boolean ligado = true;

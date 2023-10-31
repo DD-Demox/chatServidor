@@ -3,37 +3,36 @@ import java.net.Socket;
 
 public class ClientThread extends Thread {
     private Socket socket;
-    private BufferedReader inputCLient;
-    private PrintStream outputClient;
+    private ObjectInputStream inputCLient;
+    private ObjectOutputStream outputClient;
 
     public ClientThread(Socket socket) {
-       this.socket = socket;
+        this.socket = socket;
     }
 
     @Override
     public void run() {
         try {
-            inputCLient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            outputClient = new PrintStream(socket.getOutputStream(),true);
+            inputCLient = new ObjectInputStream(socket.getInputStream());
+            outputClient = new ObjectOutputStream(socket.getOutputStream());
             while(true){
-                String msg = inputCLient.readLine();
-                if(msg.equals("sair")){
-                    break;
-                }
+                String[] msg = (String[]) inputCLient.readObject();
                 imprimirParaTodos(msg);
-                JanelaPrincipal.textoServidor.append("Mensagem `"+msg+"` foi enviada por "+socket.getLocalAddress().getHostAddress()+"\n");
+                JanelaPrincipal.textoServidor.append("Mensagem `"+msg[5]+"` foi enviada por "+msg[1]+","+msg[2]+"\n");
 
             }
         }catch (IOException e){
             System.out.println(e.getStackTrace());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void imprimirParaTodos(String msg) {
+    private void imprimirParaTodos(String[] msg) throws IOException {
         for (ClientThread ct: Server.listaCLientesConectados) {
-            if(ct != this){
-                ct.outputClient.println(msg);
-            }
+
+            ct.outputClient.writeObject(msg);
+
         }
     }
 
