@@ -5,9 +5,12 @@ public class ClientThread extends Thread {
     private Socket socket;
     private ObjectInputStream inputCLient;
     private ObjectOutputStream outputClient;
+    private boolean ligado;
 
     public ClientThread(Socket socket) {
+
         this.socket = socket;
+        this.ligado = true;
     }
 
     @Override
@@ -15,12 +18,24 @@ public class ClientThread extends Thread {
         try {
             inputCLient = new ObjectInputStream(socket.getInputStream());
             outputClient = new ObjectOutputStream(socket.getOutputStream());
-            while(true){
+            while(ligado){
                 String[] msg = (String[]) inputCLient.readObject();
-                imprimirParaTodos(msg);
-                JanelaPrincipal.textoServidor.append("Mensagem `"+msg[5]+"` foi enviada por "+msg[1]+","+msg[2]+"\n");
+                switch (msg[0]){
+                    case "global":
+                        imprimirParaTodos(msg);
+                        JanelaPrincipal.textoServidor.append("Mensagem `"+msg[5]+"` foi enviada por "+msg[1]+","+msg[2]+"\n");
+                        break;
+                    case "sair":
+                        ligado = false;
+                        JanelaPrincipal.textoServidor.append(msg[5]);
+                        break;
 
+                }
             }
+            Server.listaCLientesConectados.remove(this);
+            inputCLient.close();
+            outputClient.close();
+            socket.close();
         }catch (IOException e){
             System.out.println(e.getStackTrace());
         } catch (ClassNotFoundException e) {
