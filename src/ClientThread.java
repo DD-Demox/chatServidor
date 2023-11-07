@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class ClientThread extends Thread {
     private Socket socket;
@@ -25,12 +24,15 @@ public class ClientThread extends Thread {
                 String[] msg = (String[]) inputCLient.readObject();
                 switch (msg[0]){
                     case "global":
-                        imprimirParaTodos(msg);
+                        mandaMsgParaTodos(msg);
                         JanelaPrincipal.textoServidor.append("Mensagem `"+msg[5]+"` foi enviada por "+msg[1]+","+msg[2]+"\n");
                         break;
                     case "nome":
                         this.nome = msg[1];
                         atualizarListaClientesConectados();
+                        break;
+                    case "msgPrivada":
+                        mandarMsgPrivado(msg);
                         break;
                     case "sair":
                         ligado = false;
@@ -68,11 +70,29 @@ public class ClientThread extends Thread {
         }
     }
 
-    private void imprimirParaTodos(String[] msg) throws IOException {
+    private void mandaMsgParaTodos(String[] msg) throws IOException {
         for (ClientThread ct: Server.listaCLientesConectados) {
 
             ct.outputClient.writeObject(msg);
 
+        }
+    }
+    private void mandarMsgPrivado(String[] msg) throws IOException {
+        ClientThread ctprivado = null;
+        for(ClientThread ct : Server.listaCLientesConectados){
+            if(msg[4].equals(ct.getNome())){
+                ctprivado = ct;
+                break;
+            }
+        }
+        if(ctprivado != null){
+            String[] mensagemAEnviar = new String[3];
+            mensagemAEnviar[0]="msgPrivada";
+            mensagemAEnviar[1]=msg[4];
+            mensagemAEnviar[2]=msg[2]+": "+msg[5];
+            outputClient.writeObject(mensagemAEnviar);
+            mensagemAEnviar[1]=msg[2];
+            ctprivado.outputClient.writeObject(mensagemAEnviar);
         }
     }
 
