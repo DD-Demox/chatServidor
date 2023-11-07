@@ -5,7 +5,8 @@ import java.util.ArrayList;
 
 public class Server {
 
-    public static ArrayList<ClientThread> listaCLientesConectados = new ArrayList<>();
+    public static  ArrayList<ClientThread> listaCLientesConectados = new ArrayList<>();
+
 
 
     Server(){
